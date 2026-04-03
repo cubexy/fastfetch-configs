@@ -1,0 +1,41 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "auto",
+    "source": "macos2_small",
+  },
+  "display": {
+    "separator": " // ",
+    "color": {
+      "keys": "cyan",
+    },
+  },
+  "modules": [
+    "title",
+    "separator",
+    {
+      "type": "command",
+      "key": "Net  ",
+      "text": "echo \"$(scutil --nwi | awk '/address/ {print $3; exit}' || echo 'Off') (LAN) • $(curl -s -m 1 -4 ifconfig.me || echo 'Off') (WAN)\"",
+    },
+    {
+      "type": "memory",
+      "key": "RAM  ",
+    },
+    {
+      "type": "swap",
+      "key": "Swap ",
+    },
+    {
+      "type": "disk",
+      "key": "Disk ",
+      "folders": "/",
+    },
+    {
+      "type": "command",
+      "key": "Power",
+      "text": "batt=$(pmset -g batt | grep -Eo '[0-9]+%' | head -1); watt=$(ioreg -rw0 -c AppleSmartBattery | grep -Eo '\"Watts\"=[0-9]+' | cut -d= -f2 | head -1 | tr -d '\\n'); [ -n \"$watt\" ] && [ \"$watt\" != \"0\" ] && ac=\"${watt}W (AC)\" || ac=\"Unplugged\"; echo \"${batt:-0%} (Bat) • $ac\"",
+    },
+    "break",
+  ],
+}
