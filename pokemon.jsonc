@@ -1,0 +1,32 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "command-raw",
+    "source": "pokeget $(awk 'BEGIN{srand(); split(\"chimchar turtwig piplup\", p); print p[int(rand()*3)+1]}') --hide-name",
+  },
+  "modules": [
+    "title",
+    "separator",
+    "os",
+    "host",
+    "display",
+    {
+      "type": "command",
+      "key": "Network",
+      "text": "lan=$(scutil --nwi | awk '/address/ {print $3; exit}'); [ -n \"$lan\" ] && wan=$(dig +time=1 +tries=1 +short txt ch whoami.cloudflare @1.1.1.1 2>/dev/null | tr -d '\"'); echo \"${lan:-Disconnected} (LAN) • ${wan:-Disconnected} (WAN)\"",
+    },
+    "uptime",
+    "memory",
+    "swap",
+    {
+      "type": "disk",
+      "folders": "/",
+    },
+    {
+      "type": "command",
+      "key": "Battery",
+      "text": "batt=$(pmset -g batt | grep -Eo '[0-9]+%' | head -1); watt=$(ioreg -rw0 -c AppleSmartBattery | grep -Eo '\"Watts\"=[0-9]+' | cut -d= -f2 | head -1 | tr -d '\\n'); [ -n \"$watt\" ] && [ \"$watt\" != \"0\" ] && ac=\"${watt}W (AC)\" || ac=\"Unplugged\"; echo \"${batt:-0%} (Bat) • $ac\"",
+    },
+    "break",
+  ],
+}
